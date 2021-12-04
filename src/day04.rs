@@ -1,35 +1,36 @@
-use std::fmt::{Debug, Display, format, Formatter};
-use std::str::FromStr;
 use aoc_runner_derive::aoc_generator;
-use array2d::Array2D;
+
+use std::fmt::{Debug};
+use std::str::FromStr;
 
 #[derive(Debug, Clone)]
-pub struct Board{
+pub struct Board {
     pub lines: Vec<Vec<(u32, bool)>>,
-    pub is_winning: bool
+    pub is_winning: bool,
 }
 
 impl Board {
-    pub fn new() -> Self{
-        Self{
+    pub fn new() -> Self {
+        Self {
             lines: vec![],
-            is_winning: false
+            is_winning: false,
         }
     }
 
-    pub fn add_line(&mut self, line: Vec<u32>){
-        let linex = line.iter().map(|n|{
-            (*n,false)
-        }).collect::<Vec<(u32,bool)>>();
+    pub fn add_line(&mut self, line: Vec<u32>) {
+        let linex = line
+            .iter()
+            .map(|n| (*n, false))
+            .collect::<Vec<(u32, bool)>>();
         self.lines.push(linex);
     }
 
     pub fn set_number(&mut self, number: u32) -> bool {
         for (i_line, line) in self.lines.iter().enumerate() {
-            for (i_row, (n, status)) in line.iter().enumerate() {
+            for (i_row, (n, _status)) in line.iter().enumerate() {
                 if n == &number {
                     self.lines[i_line][i_row] = (*n, true);
-                    return self.check_board(i_line, i_row)
+                    return self.check_board(i_line, i_row);
                 }
             }
         }
@@ -43,7 +44,7 @@ impl Board {
         }
         row
     }
-    pub fn check_board(&mut self, line: usize, row: usize) -> bool {
+    pub fn check_board(&mut self, _line: usize, _row: usize) -> bool {
         for line in &self.lines {
             let mut x = true;
             for row in line {
@@ -52,7 +53,7 @@ impl Board {
                 }
             }
             if x == true {
-                return true
+                return true;
             }
         }
 
@@ -64,7 +65,7 @@ impl Board {
                 }
             }
             if x == true {
-                return true
+                return true;
             }
         }
 
@@ -72,14 +73,21 @@ impl Board {
     }
 
     pub fn get_unmarked(&self) -> u32 {
-        let flat: u32 = self.lines.iter().flatten().filter(|f| {
-            f.1 == false
-        }).map(|f|f.0).sum();
+        let flat: u32 = self
+            .lines
+            .iter()
+            .flatten()
+            .filter(|f| f.1 == false)
+            .map(|f| f.0)
+            .sum();
         return flat;
     }
 }
 
-fn parse_csv<A: std::str::FromStr>(line: &str) -> Vec<A> where <A as FromStr>::Err: Debug{
+fn parse_csv<A: std::str::FromStr>(line: &str) -> Vec<A>
+where
+    <A as FromStr>::Err: Debug,
+{
     line.split(',').map(|n| n.parse().unwrap()).collect()
 }
 
@@ -88,32 +96,36 @@ pub fn input_generator(input: &str) -> (Vec<u32>, Vec<Board>) {
     let mut lines = input.lines();
 
     // Read winning numbers
-    let mut number_line = String::new();
+    let _number_line = String::new();
     let first_line = parse_csv::<u32>(lines.next().unwrap());
 
     // Skip the first new line
     lines.next();
 
     // Read boards
-    let  mut boards: Vec<Board> = vec![];
+    let mut boards: Vec<Board> = vec![];
     let mut board = Board::new();
     loop {
         let line = lines.next();
         match line {
             None => {
                 boards.push(board);
-                board = Board::new();
                 // EOF
-                break
+                break;
             }
             Some(v) => {
                 if v.trim().len() == 0 {
                     boards.push(board);
                     board = Board::new();
                     //Empty line
-                    continue
+                    continue;
                 }
-                let vx = v.trim_start().replace("  ", " ").split(' ').map(|n| n.parse().unwrap()).collect::<Vec<u32>>();
+                let vx = v
+                    .trim_start()
+                    .replace("  ", " ")
+                    .split(' ')
+                    .map(|n| n.parse().unwrap())
+                    .collect::<Vec<u32>>();
                 board.add_line(vx);
             }
         }
@@ -129,9 +141,9 @@ pub fn solve_part_1(input: &(Vec<u32>, Vec<Board>)) -> u32 {
 
     for number in numbers {
         for board in &mut boards {
-            if board.set_number(number){
+            if board.set_number(number) {
                 let sum = board.get_unmarked();
-                return sum*number;
+                return sum * number;
             }
         }
     }
@@ -147,7 +159,7 @@ pub fn solve_part_2(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     let mut winning_number = 0;
     for number in numbers {
         for board in &mut boards {
-            if !board.is_winning && board.set_number(number){
+            if !board.is_winning && board.set_number(number) {
                 board.is_winning = true;
                 current_winning = board.clone();
                 winning_number = number;
@@ -156,8 +168,5 @@ pub fn solve_part_2(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     }
 
     let sum = current_winning.get_unmarked();
-    println!("Winning number: {}", winning_number);
-    println!("Sum: {}", sum);
-
-    return sum*winning_number;
+    return sum * winning_number;
 }
