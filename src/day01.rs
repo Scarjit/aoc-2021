@@ -17,7 +17,9 @@ pub fn solve_part_1(numbers: &[u32]) -> u32 {
         .iter()
         .zip(numbers.iter().skip(1))
         .filter(|(a, b)| a < b)
-        .count().try_into().expect("Failed to convert to u32")
+        .count()
+        .try_into()
+        .expect("Failed to convert to u32")
 }
 #[inline]
 #[aoc(day1, part2)]
@@ -27,5 +29,7 @@ pub fn solve_part_2(numbers: &[u32]) -> u32 {
         .iter()
         .zip(numbers.iter().skip(3))
         .filter(|(a, b)| a < b)
-        .count().try_into().expect("Failed to convert to u32")
+        .count()
+        .try_into()
+        .expect("Failed to convert to u32")
 }
