@@ -1,12 +1,18 @@
 use aoc_runner_derive::aoc_generator;
 
-use std::fmt::{Debug};
+use std::fmt::Debug;
 use std::str::FromStr;
 
 #[derive(Debug, Clone)]
 pub struct Board {
     pub lines: Vec<Vec<(u32, bool)>>,
     pub is_winning: bool,
+}
+
+impl Default for Board {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Board {
@@ -48,11 +54,11 @@ impl Board {
         for line in &self.lines {
             let mut x = true;
             for row in line {
-                if row.1 == false {
+                if !row.1 {
                     x = false;
                 }
             }
-            if x == true {
+            if x {
                 return true;
             }
         }
@@ -60,11 +66,11 @@ impl Board {
         for r in 0..5 {
             let mut x = true;
             for row in self.get_row(r) {
-                if row.1 == false {
+                if !row.1 {
                     x = false;
                 }
             }
-            if x == true {
+            if x {
                 return true;
             }
         }
@@ -77,10 +83,10 @@ impl Board {
             .lines
             .iter()
             .flatten()
-            .filter(|f| f.1 == false)
+            .filter(|f| !f.1)
             .map(|f| f.0)
             .sum();
-        return flat;
+        flat
     }
 }
 
@@ -91,6 +97,7 @@ where
     line.split(',').map(|n| n.parse().unwrap()).collect()
 }
 
+#[inline]
 #[aoc_generator(day4)]
 pub fn input_generator(input: &str) -> (Vec<u32>, Vec<Board>) {
     let mut lines = input.lines();
@@ -114,7 +121,7 @@ pub fn input_generator(input: &str) -> (Vec<u32>, Vec<Board>) {
                 break;
             }
             Some(v) => {
-                if v.trim().len() == 0 {
+                if v.trim().is_empty() {
                     boards.push(board);
                     board = Board::new();
                     //Empty line
@@ -134,6 +141,7 @@ pub fn input_generator(input: &str) -> (Vec<u32>, Vec<Board>) {
     (first_line, boards)
 }
 
+#[inline]
 #[aoc(day4, part1)]
 pub fn solve_part_1(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     let numbers = input.0.clone();
@@ -150,6 +158,7 @@ pub fn solve_part_1(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     unreachable!()
 }
 
+#[inline]
 #[aoc(day4, part2)]
 pub fn solve_part_2(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     let numbers = input.0.clone();
@@ -168,5 +177,5 @@ pub fn solve_part_2(input: &(Vec<u32>, Vec<Board>)) -> u32 {
     }
 
     let sum = current_winning.get_unmarked();
-    return sum * winning_number;
+    sum * winning_number
 }

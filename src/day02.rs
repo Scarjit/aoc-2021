@@ -23,7 +23,7 @@ impl From<&str> for Direction {
         }
     }
 }
-
+#[inline]
 #[aoc_generator(day2)]
 pub fn input_generator(input: &str) -> Vec<NavigationCommands> {
     input
@@ -41,6 +41,7 @@ pub fn input_generator(input: &str) -> Vec<NavigationCommands> {
         .collect()
 }
 
+#[inline]
 #[aoc(day2, part1)]
 pub fn solve_part_1(navcommands: &[NavigationCommands]) -> i32 {
     let (forward, depth): (i32, i32) =
@@ -57,6 +58,7 @@ pub fn solve_part_1(navcommands: &[NavigationCommands]) -> i32 {
     forward * depth
 }
 
+#[inline]
 #[aoc(day2, part2)]
 pub fn solve_part_2(navcommands: &[NavigationCommands]) -> i32 {
     let (forward, depth, _aim): (i32, i32, i32) = navcommands.iter().fold(
