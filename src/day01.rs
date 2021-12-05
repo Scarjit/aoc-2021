@@ -1,4 +1,6 @@
 use aoc_runner_derive::aoc_generator;
+#[inline]
+#[must_use]
 #[aoc_generator(day1)]
 pub fn input_generator(input: &str) -> Vec<u32> {
     input
@@ -6,7 +8,7 @@ pub fn input_generator(input: &str) -> Vec<u32> {
         .map(|line| line.parse::<u32>().unwrap())
         .collect()
 }
-
+#[inline]
 #[aoc(day1, part1)]
 pub fn solve_part_1(numbers: &[u32]) -> u32 {
     // Iterate over numbers and numbers where first element is skipped
@@ -15,9 +17,9 @@ pub fn solve_part_1(numbers: &[u32]) -> u32 {
         .iter()
         .zip(numbers.iter().skip(1))
         .filter(|(a, b)| a < b)
-        .count() as u32
+        .count().try_into().expect("Failed to convert to u32")
 }
-
+#[inline]
 #[aoc(day1, part2)]
 pub fn solve_part_2(numbers: &[u32]) -> u32 {
     // Skip 3 here to only check in same sliding window
@@ -25,5 +27,5 @@ pub fn solve_part_2(numbers: &[u32]) -> u32 {
         .iter()
         .zip(numbers.iter().skip(3))
         .filter(|(a, b)| a < b)
-        .count() as u32
+        .count().try_into().expect("Failed to convert to u32")
 }

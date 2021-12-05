@@ -1,6 +1,8 @@
 use aoc_runner_derive::aoc_generator;
 use std::collections::HashSet;
 
+#[inline]
+#[must_use]
 #[aoc_generator(day3)]
 pub fn input_generator(input: &str) -> HashSet<Vec<bool>> {
     let x = input
@@ -10,6 +12,7 @@ pub fn input_generator(input: &str) -> HashSet<Vec<bool>> {
     x
 }
 
+#[inline]
 #[aoc(day3, part1)]
 pub fn solve_part_1(input: &HashSet<Vec<bool>>) -> i64 {
     let rows = input.iter().next().unwrap().len();
@@ -45,6 +48,7 @@ fn reduce(mut input: HashSet<Vec<bool>>, retain_one: bool) -> i64 {
     unreachable!()
 }
 
+#[inline]
 #[aoc(day3, part2)]
 pub fn solve_part_2(input: &HashSet<Vec<bool>>) -> i64 {
     let o2 = reduce(input.clone(), true);
