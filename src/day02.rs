@@ -24,6 +24,7 @@ impl From<&str> for Direction {
     }
 }
 #[inline]
+#[must_use]
 #[aoc_generator(day2)]
 pub fn input_generator(input: &str) -> Vec<NavigationCommands> {
     input

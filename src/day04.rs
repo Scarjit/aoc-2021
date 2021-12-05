@@ -98,6 +98,7 @@ where
 }
 
 #[inline]
+#[must_use]
 #[aoc_generator(day4)]
 pub fn input_generator(input: &str) -> (Vec<u32>, Vec<Board>) {
     let mut lines = input.lines();
